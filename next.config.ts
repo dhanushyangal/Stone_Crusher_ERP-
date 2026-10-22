@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Authenticated ERP — all pages/APIs are request-time dynamic.
+  cacheComponents: false,
   turbopack: {
     rules: {
       "*.css": {

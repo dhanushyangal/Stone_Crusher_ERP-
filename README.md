@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stone Crusher ERP
 
-## Getting Started
+Production-oriented ERP for an Indian stone crusher business: sales, production, stock, payments, expenses, and reports. **Online-only** — internet required for all writes.
 
-First, run the development server:
+**Stack:** Next.js (App Router) · TypeScript · Tailwind · Prisma · PostgreSQL · Supabase-compatible · Vitest / Playwright
+
+## Quick start (local)
 
 ```bash
+# PostgreSQL 16 (Homebrew example)
+brew services start postgresql@16
+createdb stone_crusher_erp
+
+cp .env.example .env
+# Edit DATABASE_URL / SESSION_SECRET / Supabase keys
+
+npm install
+npx prisma migrate deploy
+npm run db:seed          # clean bootstrap only (site, owner, units) — no demo sales data
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Initial owner (after seed):**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Email | Default password |
+| --- | --- |
+| `owner@crusher.local` | `ChangeMe@123` (override with `OWNER_SEED_PASSWORD`) |
 
-## Learn More
+Add customers, products, and staff yourself — the seed does not insert demo business data.
 
-To learn more about Next.js, take a look at the following resources:
+To wipe everything and start clean again:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npx prisma migrate reset --force
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Supabase
 
-## Deploy on Vercel
+This project is wired for the Supabase project keys (`SUPABASE_URL`, publishable/secret keys, JWKS). Business data uses **Prisma → Postgres**.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. In Supabase → **Settings → Database**, copy the connection URI.
+2. Set `DATABASE_URL` (pooler) and `DIRECT_URL` (direct/session) in `.env`.
+3. Run `npx prisma migrate deploy`.
+4. Keep `SEED_DEMO_DATA=false` in production.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Optional: `npm install @supabase/server` is already included for Edge/API helpers.
+
+## Scripts
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Dev server |
+| `npm run build` / `start` | Production |
+| `npm run db:migrate` | Apply migrations |
+| `npm run db:seed` | Seed demo masters |
+| `npm test` | Unit + integration tests |
+| `npm run test:unit` | Calculation / permission unit tests |
+| `npm run test:integration` | DB workflow tests |
+
+## Business rule (default)
+
+`1 billing unit = 4 tunes` (configurable; snapshotted on each sale line).
+
+Tune is a **business unit**, not a tonne.
+
+## Documentation
+
+See `docs/`:
+
+- `architecture.md`
+- `database-schema.md`
+- `business-rules.md`
+- `api.md`
+- `offline-sync.md` (online-only note; sync removed)
+- `deployment.md`
+- `user-guide.md`
+- `CHECKLIST.md`
+
+## Connectivity
+
+- Internet required for creating/posting sales and other writes
+- Banner shown when offline; actions are blocked until reconnect
+- Optional PWA manifest at `/manifest.webmanifest` (home-screen icon only; not an offline store)
+
+## Tests
+
+```bash
+npm run test:unit
+npm run test:integration
+```
