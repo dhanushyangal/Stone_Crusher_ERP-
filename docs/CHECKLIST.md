@@ -13,7 +13,7 @@ Mark complete only after implementation + verification.
 - [x] Customers CRUD + ledger
 - [x] Suppliers CRUD
 - [x] Products + units + conversions (seeded)
-- [x] Seed demo data
+- [x] Seed bootstrap (site, owner, units — no fake transactions)
 
 ## Phase 3 — Inventory
 - [x] Stock ledger

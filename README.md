@@ -43,8 +43,6 @@ This project is wired for the Supabase project keys (`SUPABASE_URL`, publishable
 1. In Supabase → **Settings → Database**, copy the connection URI.
 2. Set `DATABASE_URL` (pooler) and `DIRECT_URL` (direct/session) in `.env`.
 3. Run `npx prisma migrate deploy`.
-4. Keep `SEED_DEMO_DATA=false` in production.
-
 Optional: `npm install @supabase/server` is already included for Edge/API helpers.
 
 ## Scripts

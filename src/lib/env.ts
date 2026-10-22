@@ -6,10 +6,6 @@ const envSchema = z.object({
   BUSINESS_TIMEZONE: z.string().default("Asia/Kolkata"),
   CURRENCY: z.string().default("INR"),
   SESSION_SECRET: z.string().min(16),
-  SEED_DEMO_DATA: z
-    .string()
-    .optional()
-    .transform((v) => v === "true"),
   DATABASE_URL: z.string().min(1),
   DIRECT_URL: z.string().min(1),
   SUPABASE_URL: z.string().url(),
@@ -40,12 +36,4 @@ export function getEnv(): AppEnv {
   }
   cached = parsed.data;
   return cached;
-}
-
-export function isDemoSeedEnabled(): boolean {
-  try {
-    return Boolean(getEnv().SEED_DEMO_DATA) && getEnv().NODE_ENV !== "production";
-  } catch {
-    return process.env.SEED_DEMO_DATA === "true" && process.env.NODE_ENV !== "production";
-  }
 }

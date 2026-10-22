@@ -9,7 +9,6 @@
 | `SESSION_SECRET` | Cookie signing/hashing pepper |
 | `SUPABASE_URL` / `SUPABASE_*_KEY` / `SUPABASE_JWKS_URL` | Supabase project |
 | `APP_URL` | Public URL |
-| `SEED_DEMO_DATA` | Must be `false`/unset in production |
 
 ## Local
 
@@ -30,7 +29,7 @@ npm run dev
 4. `npx prisma migrate deploy`
 5. Deploy Next.js to your host (Vercel, etc.) with HTTPS.
 6. Enable automated Postgres backups in Supabase dashboard.
-7. Do **not** run the demo seed against production.
+7. Seed only creates site/owner/units (no fake sales data). Prefer running seed from a trusted machine with `ALLOW_PROD_SEED=true` if needed.
 
 ## Backups
 
